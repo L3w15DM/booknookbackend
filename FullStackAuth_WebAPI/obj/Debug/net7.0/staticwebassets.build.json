@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "VkNnBHWr0SE7dTPFs84aHKaKoD/BfB/BuhaPXo0+Mxo=",
+  "Source": "FullStackAuth_WebAPI",
+  "BasePath": "_content/FullStackAuth_WebAPI",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
