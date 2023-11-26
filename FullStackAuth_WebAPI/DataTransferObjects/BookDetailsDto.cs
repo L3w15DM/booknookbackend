@@ -3,9 +3,8 @@ namespace FullStackAuth_WebAPI.DataTransferObjects
 {
 	public class BookDetailsDto
 	{
-		public BookDetailsDto()
-		{
-		}
+		public List<ReviewWithUserDto> Reviews { get; set; }
+		public double AverageRating { get; set; }
 	}
 }
 
