@@ -25,12 +25,11 @@ namespace FullStackAuth_WebAPI.Controllers
         }
 
       
-        [HttpGet("bookId")]
+        [HttpGet("{bookId}")]
         public IActionResult Get(string bookId)
         {
             
-            List<ReviewWithUserDto> reviews = _context.Reviews
-                .Where(b => b.BookId == bookId).Include(b => b.User).Select(r => new ReviewWithUserDto
+            List<ReviewWithUserDto> reviews = _context.Reviews.Where(b => b.BookId == bookId).Include(b => b.User).Select(r => new ReviewWithUserDto
                 {
                     Id = r.Id,
                     BookId = r.BookId,
@@ -40,58 +39,53 @@ namespace FullStackAuth_WebAPI.Controllers
                     {
                         Id = r.User.Id,
                         FirstName = r.User.FirstName,
+                        LastName = r.User.LastName,
                         UserName = r.User.UserName
                     }
                 }).ToList();
 
-            string userId = User.FindFirstValue("id");
 
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized();
-            }
 
-            // sum of ratings
-            double ratingsSum = reviews.Select(r => r.Rating).Sum();
+            // ratings sum
+            double ratingsAvg = reviews.Select(r => r.Rating).Average();
 
-            // average of ratings
-            double ratingsAvg = reviews.Count() > 0 ? ratingsSum / reviews.Count() : 0.0;
-            //
+            
+            
             BookDetailsDto bookDetails = new BookDetailsDto
             {
-                Reviews = reviews,
+                Reviews = reviews, 
                 AverageRating = ratingsAvg
             };
 
 
-            return StatusCode(200);
+            return StatusCode(200, bookDetails);
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+        //// GET api/values/5
+        //[HttpGet("{id}")]
+        //public string Get(int id)
+        //{
+        //    return "value";
+        //}
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
+        //// POST api/values
+        //[HttpPost]
+        //public void Post([FromBody]string value)
+        //{
+        //}
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+        //// PUT api/values/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
+        //{
 
-        }
+        //}
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        //// DELETE api/values/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
     }
 }
 
