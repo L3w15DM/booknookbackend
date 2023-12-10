@@ -44,6 +44,15 @@ namespace FullStackAuth_WebAPI.Controllers
                     }
                 }).ToList();
 
+            // Favorite is false unless user is logged in
+            bool favorite = false;
+            // Find userId
+            string userId = User.FindFirstValue("id");
+            // If user is logged in show favorites
+            if (userId != null)
+            {
+                favorite = _context.Favorites.Where(f => f.UserId == userId).Select(f => f.BookId).ToList().Contains(bookId);
+            }
 
 
             // ratings sum
@@ -54,38 +63,15 @@ namespace FullStackAuth_WebAPI.Controllers
             BookDetailsDto bookDetails = new BookDetailsDto
             {
                 Reviews = reviews, 
-                AverageRating = ratingsAvg
+                AverageRating = ratingsAvg,
+                IsFavorite = favorite
             };
 
 
             return StatusCode(200, bookDetails);
         }
 
-        //// GET api/values/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/values
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/values/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-
-        //}
-
-        //// DELETE api/values/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+       
     }
 }
 

@@ -98,3 +98,4 @@
 /Users/l3w15dm/Desktop/booknookbackend/FullStackAuth_WebAPI/obj/Debug/net7.0/FullStackAuth_WebAPI.pdb
 /Users/l3w15dm/Desktop/booknookbackend/FullStackAuth_WebAPI/obj/Debug/net7.0/FullStackAuth_WebAPI.genruntimeconfig.cache
 /Users/l3w15dm/Desktop/booknookbackend/FullStackAuth_WebAPI/obj/Debug/net7.0/ref/FullStackAuth_WebAPI.dll
+/Users/l3w15dm/Desktop/booknookbackend/FullStackAuth_WebAPI/bin/Debug/net7.0/ASP_NET_Starter.postman_collection.json
