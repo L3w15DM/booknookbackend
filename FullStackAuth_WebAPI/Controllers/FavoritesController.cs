@@ -7,6 +7,7 @@ using FullStackAuth_WebAPI.Data;
 using FullStackAuth_WebAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -34,27 +35,33 @@ namespace FullStackAuth_WebAPI.Controllers
 
         // POST api/values
         [HttpPost, Authorize]
-        public IActionResult Post([FromBody] Favorite book)
+        public IActionResult Post([FromBody] Favorite data)
         {
-            //Check current user to get id. 
-            var userId = User.FindFirstValue("id");
-            //Check if it is favorite already
-            var alreadyFavorited = _context.Favorites.Where(f => f.BookId == book.BookId).Where(f => f.UserId == userId).ToList();
-            if (!alreadyFavorited.Any())
+            try
             {
-                book.UserId = userId;
-                _context.Favorites.Add(book);
+                // Retrieve the authenticated user's ID from the JWT token
+                string userId = User.FindFirstValue("id");
+
+                // If the user ID is null or empty, the user is not authenticated, so return a 401 unauthorized response
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return Unauthorized();
+                }
+                data.UserId = userId;
+
+
+                // Add the book to the database and save changes
+                _context.Favorites.Add(data);
                 _context.SaveChanges();
+
+                // Return the newly created favorite book as a 201 created response
+                return StatusCode(201, data);
             }
-            else
+            catch (Exception ex)
             {
-                return Conflict(new { error = "Resource Already Exists", message = "You already favorited this book." });
+                // If an error occurs, return a 500 internal server error with the error message
+                return StatusCode(500, ex.Message);
             }
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            return StatusCode(201, book);
         }
 
        

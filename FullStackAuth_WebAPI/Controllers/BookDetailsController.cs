@@ -28,7 +28,7 @@ namespace FullStackAuth_WebAPI.Controllers
         [HttpGet("{bookId}")]
         public IActionResult Get(string bookId)
         {
-            
+            // List of reviews 
             List<ReviewWithUserDto> reviews = _context.Reviews.Where(b => b.BookId == bookId).Include(b => b.User).Select(r => new ReviewWithUserDto
                 {
                     Id = r.Id,
@@ -38,33 +38,27 @@ namespace FullStackAuth_WebAPI.Controllers
                     User = new UserForDisplayDto
                     {
                         Id = r.User.Id,
-                        FirstName = r.User.FirstName,
-                        LastName = r.User.LastName,
                         UserName = r.User.UserName
                     }
                 }).ToList();
 
-            // Favorite is false unless user is logged in
-            bool favorite = false;
-            // Find userId
+
+            // Find userId 
             string userId = User.FindFirstValue("id");
-            // If user is logged in show favorites
-            if (userId != null)
-            {
-                favorite = _context.Favorites.Where(f => f.UserId == userId).Select(f => f.BookId).ToList().Contains(bookId);
-            }
 
-
-            // ratings sum
+            // Average of user ratings
             double ratingsAvg = reviews.Select(r => r.Rating).Average();
 
-            
-            
+            //Check if logged in user has favorited book
+            bool isFavorite = _context.Favorites.Any(f => f.BookId == bookId && f.UserId == userId);
+
+            // DTO returns lists of reviews, ratings, and if book is favorite(if logged in)
             BookDetailsDto bookDetails = new BookDetailsDto
             {
                 Reviews = reviews, 
                 AverageRating = ratingsAvg,
-                IsFavorite = favorite
+                IsFavorite = isFavorite 
+                
             };
 
 
